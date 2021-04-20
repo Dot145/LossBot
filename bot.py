@@ -1,6 +1,5 @@
 # bot.py
 import os
-os.chdir('LossBot/')
 import discord
 import torch
 from torch import nn
