@@ -1,21 +1,21 @@
 # bot.py
 import os
-
+os.chdir('LossBot/')
 import discord
 import torch
 from torch import nn
 from torchvision import models, transforms
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 from PIL import Image, ImageOps
 import numpy as np
 import torch.nn.functional as F
 import uuid
 
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
-VGG_LOCATION = os.getenv('VGG_LOCATION')
-INCEPTION_LOCATION = os.getenv('INCEPTION_LOCATION')
-RESNET_LOCATION = os.getenv('RESNET_LOCATION')
+env = dotenv_values('.env')
+TOKEN = env['DISCORD_TOKEN']#os.getenv('DISCORD_TOKEN')
+VGG_LOCATION = env['VGG_LOCATION']
+INCEPTION_LOCATION = env['INCEPTION_LOCATION']
+RESNET_LOCATION = env['RESNET_LOCATION']
 
 device = torch.device('cpu')
 
