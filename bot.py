@@ -179,6 +179,6 @@ class VGGNet:
             VGGNet.vgg_model = self.vgg_model
             print("done")
 
-print(f"Starting LossBot…")
+
 client = LossClient()
 client.run(TOKEN)
