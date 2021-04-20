@@ -35,6 +35,12 @@ class LossClient(discord.Client):
         activity = discord.Game(name="\"-LossBot help\" for info")
         await client.change_presence(status=discord.Status.online, activity=activity)
 
+    async def on_close(self):
+        print('Shutting down...')
+        await client.change_presence(status=discord.Status.offline)
+        await client.close()
+
+
     async def on_message(self, message):
         if self.proc_condition(message):
             url = ""
@@ -69,7 +75,6 @@ class LossClient(discord.Client):
             emoji = '<:boolin:702581139369361439>'
             await message.add_reaction(emoji)
         if message.content.lower() == '-lossbot stop':
-            await client.change_presence(status=discord.Status.offline)
             await client.close()
             print('Shutting down.')
 
