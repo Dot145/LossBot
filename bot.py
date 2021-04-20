@@ -68,7 +68,8 @@ class LossClient(discord.Client):
         if  client.user.mentioned_in(message):
             emoji = '<:boolin:702581139369361439>'
             await message.add_reaction(emoji)
-        if message.content.lower() == '<:monkaGun:730901358483472505> lossbot':
+        if message.content.lower() == '-lossbot stop':
+            await client.change_presence(status=discord.Status.offline)
             await client.close()
             print('Shutting down.')
 
