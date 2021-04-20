@@ -66,8 +66,11 @@ class LossClient(discord.Client):
                                        "-yes: tell the bot that this is loss (doesn't affect output)\n  "
                                        "-no: tell the bot that this is not loss (doesn't affect output)")
         if  client.user.mentioned_in(message):
-            emoji = '<:boolin:734531249296637953>'
+            emoji = '<:boolin:702581139369361439>'
             await message.add_reaction(emoji)
+        if message.content.lower() == '<:monkaGun:730901358483472505> lossbot':
+            await client.close()
+            print('Shutting down.')
 
     def proc_condition(self, message):
         if message.content.lower().startswith('is this loss'):
