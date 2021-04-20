@@ -65,6 +65,9 @@ class LossClient(discord.Client):
                                        "-v: print out approximate percentages\n  "
                                        "-yes: tell the bot that this is loss (doesn't affect output)\n  "
                                        "-no: tell the bot that this is not loss (doesn't affect output)")
+        if  client.user.mentioned_in(message):
+            emoji = '<:boolin:734531249296637953>'
+            await message.add_reaction(emoji)
 
     def proc_condition(self, message):
         if message.content.lower().startswith('is this loss'):
