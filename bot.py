@@ -41,29 +41,34 @@ class LossClient(discord.Client):
         await client.close()
 
 
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         if self.proc_condition(message):
             url = ""
             atts = message.attachments
+            if len(atts) == 0 and message.reference is not None and message.reference.resolved is not None:
+                # See https://discordpy.readthedocs.io/en/stable/api.html?highlight=message#discord.MessageReference.resolved
+                atts = message.reference.resolved.attachments # type: list[discord.message.Attachment]
+
             if len(atts) == 1:
-                url = message.attachments[0].url
+                att = atts[0]
+                url = att.url
                 if url.split('.')[-1] not in ['png', 'jpg', 'bmp', 'jpeg']:
-                    await message.channel.send("I can only read detect loss in images of type .png, .jp(e)g, or .bmp.")
+                    await message.reply("I can only read detect loss in images of type .png, .jp(e)g, or .bmp.")
                 else:
                     #generate a unique id to save the picture
                     id = str(uuid.uuid4())
                     if '-yes' in message.content:
-                        await message.attachments[0].save(os.path.join('./data/loss/', id + '.png'))
+                        await att.save(os.path.join('./data/loss/', id + '.png'))
                     elif '-no' in message.content:
-                        await message.attachments[0].save(os.path.join('./data/not_loss/', id + '.png'))
-                    await message.attachments[0].save(os.path.join('./img'))
+                        await att.save(os.path.join('./data/not_loss/', id + '.png'))
+                    await att.save(os.path.join('./img'))
                     im = Image.open('./img')
                     result = self.test_image(im)
                     if '-v' in message.content:
-                        await message.channel.send("This is {:.4f}% loss and {:.4f}% not loss"
-                                                   .format(result[1][0]*100, result[1][1]*100))
+                        await message.reply("This is {:.4f}% loss and {:.4f}% not loss"
+                                            .format(result[1][0]*100, result[1][1]*100))
                     else:
-                        await message.channel.send("This is {}".format(result[0]))
+                        await message.reply("This is {}".format(result[0]))
         elif message.content.lower() == '-lossbot help':
             await message.channel.send("Begin your message with \"Is this loss\" "
                                        "and upload an image to test alongside it.\n "
