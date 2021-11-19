@@ -45,6 +45,10 @@ class LossClient(discord.Client):
         if self.proc_condition(message):
             url = ""
             atts = message.attachments
+            if len(atts) == 0 and message.reference is not None and message.reference.resolved is not None:
+                # See https://discordpy.readthedocs.io/en/stable/api.html?highlight=message#discord.MessageReference.resolved
+                atts = message.reference.resolved.attachments # type: list[discord.message.Attachment]
+
             if len(atts) == 1:
                 att = atts[0]
                 url = att.url
