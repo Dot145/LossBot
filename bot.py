@@ -41,14 +41,14 @@ class LossClient(discord.Client):
         await client.close()
 
 
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         if self.proc_condition(message):
             url = ""
             atts = message.attachments
             if len(atts) == 1:
                 url = message.attachments[0].url
                 if url.split('.')[-1] not in ['png', 'jpg', 'bmp', 'jpeg']:
-                    await message.channel.send("I can only read detect loss in images of type .png, .jp(e)g, or .bmp.")
+                    await message.reply("I can only read detect loss in images of type .png, .jp(e)g, or .bmp.")
                 else:
                     #generate a unique id to save the picture
                     id = str(uuid.uuid4())
@@ -60,10 +60,10 @@ class LossClient(discord.Client):
                     im = Image.open('./img')
                     result = self.test_image(im)
                     if '-v' in message.content:
-                        await message.channel.send("This is {:.4f}% loss and {:.4f}% not loss"
-                                                   .format(result[1][0]*100, result[1][1]*100))
+                        await message.reply("This is {:.4f}% loss and {:.4f}% not loss"
+                                            .format(result[1][0]*100, result[1][1]*100))
                     else:
-                        await message.channel.send("This is {}".format(result[0]))
+                        await message.reply("This is {}".format(result[0]))
         elif message.content.lower() == '-lossbot help':
             await message.channel.send("Begin your message with \"Is this loss\" "
                                        "and upload an image to test alongside it.\n "
