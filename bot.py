@@ -46,17 +46,18 @@ class LossClient(discord.Client):
             url = ""
             atts = message.attachments
             if len(atts) == 1:
-                url = message.attachments[0].url
+                att = atts[0]
+                url = att.url
                 if url.split('.')[-1] not in ['png', 'jpg', 'bmp', 'jpeg']:
                     await message.reply("I can only read detect loss in images of type .png, .jp(e)g, or .bmp.")
                 else:
                     #generate a unique id to save the picture
                     id = str(uuid.uuid4())
                     if '-yes' in message.content:
-                        await message.attachments[0].save(os.path.join('./data/loss/', id + '.png'))
+                        await att.save(os.path.join('./data/loss/', id + '.png'))
                     elif '-no' in message.content:
-                        await message.attachments[0].save(os.path.join('./data/not_loss/', id + '.png'))
-                    await message.attachments[0].save(os.path.join('./img'))
+                        await att.save(os.path.join('./data/not_loss/', id + '.png'))
+                    await att.save(os.path.join('./img'))
                     im = Image.open('./img')
                     result = self.test_image(im)
                     if '-v' in message.content:
