@@ -52,7 +52,7 @@ class LossClient(discord.Client):
             if len(atts) == 1:
                 att = atts[0]
                 url = att.url
-                if url.split('.')[-1] not in ['png', 'jpg', 'bmp', 'jpeg']:
+                if url.split('.')[-1].lower() not in ['png', 'jpg', 'bmp', 'jpeg']:
                     await message.reply("I can only read detect loss in images of type .png, .jp(e)g, or .bmp.")
                 else:
                     #generate a unique id to save the picture
